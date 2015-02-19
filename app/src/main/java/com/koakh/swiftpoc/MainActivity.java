@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -29,7 +29,6 @@ import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.IListContainers;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.ListContainersResponse;
 import com.koakh.swiftpoc.rest.swiftidentityauthenticate.AuthenticateResponse;
 import com.koakh.swiftpoc.rest.swiftidentityauthenticate.IAuthenticateService;
-import com.koakh.swiftpoc.rest.swiftidentityauthenticate.ListContainersResponse;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -52,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
   private Singleton app;
 
   //UI
-  private TextView mEditText;
+  private EditText mEditText;
 
   private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_b56470aae58e47c6bdf8dd62939db329";
   private static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
@@ -70,12 +69,17 @@ public class MainActivity extends ActionBarActivity {
     mViewPager = (ViewPager) findViewById(R.id.pager);
     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-    mEditText = (TextView) findViewById(R.id.editText);
-    mEditText.append("Hello Koakh");
-    mEditText.scrollTo(0, Integer.MAX_VALUE);
-
     //Get Application Singleton
     app = ((Singleton) this.getApplicationContext());
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    mEditText = (EditText) findViewById(R.id.editText);
+    mEditText.append("Hello Koakh");
+    mEditText.scrollTo(0, Integer.MAX_VALUE);
   }
 
   @Override
@@ -207,6 +211,7 @@ public class MainActivity extends ActionBarActivity {
               app.setAuthenticateResponse(responseObject);
               Log.d(app.getTag(), String.format("AuthenticateToken : [%s]", app.getAuthenticateToken()));
               mEditText.append(app.getAuthenticateToken());
+              mEditText.scrollTo(0, Integer.MAX_VALUE);
             }
 
             @Override
@@ -230,12 +235,13 @@ public class MainActivity extends ActionBarActivity {
         try {
           IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, API_URL_SWIFT);
 
-          Callback<ListContainersResponse> listContainersCallback = new Callback<ListContainersResponse>() {
+          Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             @Override
             public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
               for (ListContainersResponse container : responseObject) {
                 mEditText.append(container.getName());
               }
+              mEditText.scrollTo(0, Integer.MAX_VALUE);
             }
 
             @Override
@@ -243,7 +249,6 @@ public class MainActivity extends ActionBarActivity {
             }
           };
           listContainersService.listContainers(app.getAuthenticateToken(), listContainersCallback);
-
 
         } catch (Exception ex) {
           ex.printStackTrace();
@@ -253,4 +258,3 @@ public class MainActivity extends ActionBarActivity {
   }
 
 }
-
