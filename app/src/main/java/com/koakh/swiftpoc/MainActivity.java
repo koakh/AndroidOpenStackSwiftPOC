@@ -3,12 +3,15 @@ package com.koakh.swiftpoc;
 import java.util.List;
 import java.util.Locale;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,12 +77,12 @@ public class MainActivity extends ActionBarActivity {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-
+  public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
     mEditText = (EditText) findViewById(R.id.editText);
     mEditText.append("Hello Koakh");
     mEditText.scrollTo(0, Integer.MAX_VALUE);
+
+    return super.onCreateView(name, context, attrs);
   }
 
   @Override
