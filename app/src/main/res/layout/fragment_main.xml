@@ -1,0 +1,52 @@
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".MainActivity$PlaceholderFragment"
+  style="@style/LinearLayout"
+  android:orientation="vertical">
+
+  <Button
+    android:id="@+id/button_get_token"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_get_token"
+    android:onClick="onClickButtonGetToken"
+    />
+
+  <Button
+    android:id="@+id/button_test_authentication"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_test_authentication"
+    />
+
+  <Button
+    android:id="@+id/button_list_containers"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_list_containers"
+    android:onClick="onClickButtonListContainers"
+    />
+
+  <Button
+    android:id="@+id/button_upload"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_upload"
+    />
+
+  <Button
+    android:id="@+id/button_get_metadata"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_get_metadata"
+    />
+
+  <EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textMultiLine"
+    android:ems="10"
+    android:id="@+id/editText"/>
+
+</LinearLayout>

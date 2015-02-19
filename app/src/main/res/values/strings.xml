@@ -1,0 +1,17 @@
+<resources>
+  <string name="app_name">SwiftPOC</string>
+
+  <string name="title_section1">Section 1</string>
+  <string name="title_section2">Section 2</string>
+  <string name="title_section3">Section 3</string>
+
+  <string name="hello_world">Hello world!</string>
+
+  <string name="action_settings">Settings</string>
+
+  <string name="button_get_token">Get Token</string>
+  <string name="button_test_authentication">Test Authentication</string>
+  <string name="button_list_containers">List Containers</string>
+  <string name="button_upload">Upload</string>
+  <string name="button_get_metadata">Get MetaData</string>
+</resources>
