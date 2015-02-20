@@ -1,17 +1,14 @@
-package com.koakh.swiftpoc;
+package com.koakh.swiftpoc.ui;
 
 import java.util.List;
 import java.util.Locale;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +24,7 @@ import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 
+import com.koakh.swiftpoc.R;
 import com.koakh.swiftpoc.rest.ServiceGenerator;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.IListContainers;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.ListContainersResponse;
@@ -51,10 +49,10 @@ public class MainActivity extends ActionBarActivity {
   ViewPager mViewPager;
 
   //Application Singleton
-  private Singleton app;
+  private Singleton mApp;
 
   //UI
-  private EditText mEditText;
+  //private View mRootView;
 
   private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_b56470aae58e47c6bdf8dd62939db329";
   private static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
@@ -73,16 +71,7 @@ public class MainActivity extends ActionBarActivity {
     mViewPager.setAdapter(mSectionsPagerAdapter);
 
     //Get Application Singleton
-    app = ((Singleton) this.getApplicationContext());
-  }
-
-  @Override
-  public View onCreateView(String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-    mEditText = (EditText) findViewById(R.id.editText);
-    mEditText.append("Hello Koakh");
-    mEditText.scrollTo(0, Integer.MAX_VALUE);
-
-    return super.onCreateView(name, context, attrs);
+    mApp = ((Singleton) this.getApplicationContext());
   }
 
   @Override
@@ -106,6 +95,9 @@ public class MainActivity extends ActionBarActivity {
 
     return super.onOptionsItemSelected(item);
   }
+
+  //============================================================================================================================================================================
+  //Fragments
 
   /**
    * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -145,19 +137,25 @@ public class MainActivity extends ActionBarActivity {
     }
   }
 
+  //============================================================================================================================================================================
+  //Fragment PlaceHolder
+
   /**
    * A placeholder fragment containing a simple view.
    */
   public static class PlaceholderFragment extends Fragment {
     /**
-     * The fragment argument representing the section number for this
-     * fragment.
+     * The fragment argument representing the section number for this fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Application Singleton
+     */
+    private Singleton mApp;
+
+    /**
+     * Returns a new instance of this fragment for the given section number.
      */
     public static PlaceholderFragment newInstance(int sectionNumber) {
       PlaceholderFragment fragment = new PlaceholderFragment();
@@ -171,15 +169,26 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+      //Get Application Singleton
+      mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
+
+      EditText editText = (EditText) rootView.findViewById(R.id.editText);
+      editText.append("Hello Koakh");
+      editText.scrollTo(0, Integer.MAX_VALUE);
+      mApp.setEditTextLog(editText);
+
       return rootView;
     }
   }
 
+  //============================================================================================================================================================================
+  //Events
+
   public void onClickButtonGetToken(View view) {
-    Log.d(app.getTag(), "Tst Log");
+    Log.d(mApp.getTag(), "Tst Log");
 
     new Thread(new Runnable() {
       @Override
@@ -192,10 +201,11 @@ public class MainActivity extends ActionBarActivity {
             .build();
           IGitHubService service1 = restAdapter1.create(IGitHubService.class);
           List<Object> repos = service1.listRepos("octocat");
-          Log.d(app.getTag(), repos.get(0).toString());
+          Log.d(mApp.getTag(), repos.get(0).toString());
           */
 
 
+          //TODO: Create a Auth Objectt , do not send BODY has JSON
           String jsonString = "{\"auth\": {\"tenantName\": \"admin\", \"passwordCredentials\":{\"username\": \"admin\", \"password\": \"kksc28kk\"}}}";
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
 
@@ -206,20 +216,20 @@ public class MainActivity extends ActionBarActivity {
             .build();
 
           IAuthenticateService authenicateService = authenticateRestAdapter.create(IAuthenticateService.class);
-          Log.d(app.getTag(), jsonString);
+          Log.d(mApp.getTag(), jsonString);
 
           Callback<AuthenticateResponse> authenticateCallback = new Callback<AuthenticateResponse>() {
             @Override
             public void success(AuthenticateResponse responseObject, Response responseRaw) {
-              app.setAuthenticateResponse(responseObject);
-              Log.d(app.getTag(), String.format("AuthenticateToken : [%s]", app.getAuthenticateToken()));
-              mEditText.append(app.getAuthenticateToken());
-              mEditText.scrollTo(0, Integer.MAX_VALUE);
+              mApp.setAuthenticateResponse(responseObject);
+              Log.d(mApp.getTag(), String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
+              mApp.getEditTextLog().append(mApp.getAuthenticateToken());
+              mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
             @Override
             public void failure(RetrofitError error) {
-              Log.e(app.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
+              Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
             }
           };
           authenicateService.authenticate(rawJsonBody, authenticateCallback);
@@ -242,16 +252,16 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
               for (ListContainersResponse container : responseObject) {
-                mEditText.append(container.getName());
+                mApp.getEditTextLog().append(container.getName());
               }
-              mEditText.scrollTo(0, Integer.MAX_VALUE);
+              mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
             @Override
             public void failure(RetrofitError error) {
             }
           };
-          listContainersService.listContainers(app.getAuthenticateToken(), listContainersCallback);
+          listContainersService.listContainers(mApp.getAuthenticateToken(), listContainersCallback);
 
         } catch (Exception ex) {
           ex.printStackTrace();
