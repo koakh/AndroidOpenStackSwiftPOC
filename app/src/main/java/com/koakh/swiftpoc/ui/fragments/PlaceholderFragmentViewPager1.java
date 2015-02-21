@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.koakh.swiftpoc.R;
-import com.koakh.swiftpoc.ui.Singleton;
+import com.koakh.swiftpoc.app.Singleton;
 
 /**
  * A placeholder fragment containing a simple view.

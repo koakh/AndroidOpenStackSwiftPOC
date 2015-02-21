@@ -1,4 +1,4 @@
-package com.koakh.swiftpoc.ui;
+package com.koakh.swiftpoc.app;
 
 import android.app.Application;
 import android.widget.EditText;
@@ -12,7 +12,10 @@ public class Singleton extends Application {
 
   public final String TAG = "SwiftPOC";
 
-  //Store Authentication Resposnse, Includes all Details, ex Token used for all Request
+  /**
+   * Swift/OpenStack
+   */
+  //Store FULL Authentication Response, Includes all Details, ex Token used for all Request
   private AuthenticateResponse authenticateResponse;
 
   private EditText editTextLog;
@@ -33,6 +36,10 @@ public class Singleton extends Application {
 
   public String getAuthenticateToken() {
     return authenticateResponse.getAccess().getToken().getId();
+  }
+
+  public String getTenant() {
+    return authenticateResponse.getAccess().getUser().getId();
   }
 
   public EditText getEditTextLog() {

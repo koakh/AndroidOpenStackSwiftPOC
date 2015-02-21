@@ -1,4 +1,4 @@
-package com.koakh.swiftpoc.ui;
+package com.koakh.swiftpoc.app;
 
 import java.util.List;
 import java.util.Locale;
@@ -10,12 +10,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -57,8 +54,8 @@ public class MainActivity extends ActionBarActivity {
   //UI
   //private View mRootView;
 
-  private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_b56470aae58e47c6bdf8dd62939db329";
   private static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
+  private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_%s";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -171,14 +168,15 @@ public class MainActivity extends ActionBarActivity {
           Log.d(mApp.getTag(), repos.get(0).toString());
           */
 
+          String url = String.format(API_URL_SWIFT, mApp.getTenant());
 
-          //TODO: Create a Auth Objectt , do not send BODY has JSON
+          //TODO: Create a Auth Object , do not send BODY has JSON
           String jsonString = "{\"auth\": {\"tenantName\": \"admin\", \"passwordCredentials\":{\"username\": \"admin\", \"password\": \"kksc28kk\"}}}";
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
 
           //TODO: Change with ServiceGenerator
           final RestAdapter authenticateRestAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://192.168.1.31:5000/v2.0")
+            .setEndpoint(API_URL_IDENTITY)
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .build();
 
@@ -213,7 +211,7 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-          String url = String.format("%s?format=json", API_URL_SWIFT);
+          String url = String.format(API_URL_SWIFT, mApp.getTenant() + "?format=json");
           IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, url);
 
           Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
