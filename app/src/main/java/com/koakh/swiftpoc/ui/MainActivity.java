@@ -30,6 +30,7 @@ import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.IListContainers;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.ListContainersResponse;
 import com.koakh.swiftpoc.rest.swiftidentityauthenticate.AuthenticateResponse;
 import com.koakh.swiftpoc.rest.swiftidentityauthenticate.IAuthenticateService;
+import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager3;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -121,7 +122,7 @@ public class MainActivity extends ActionBarActivity {
         case 1:
           return PlaceholderFragmentViewPager2.newInstance(2);
         case 2:
-          return PlaceholderFragmentViewPager1.newInstance(3);
+          return PlaceholderFragmentViewPager3.newInstance(3);
         default:
           return null;
       }
@@ -188,16 +189,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-      View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+      View rootView = inflater.inflate(R.layout.fragment_section1, container, false);
       //if (savedInstanceState != null) int sectionNumber = savedInstanceState.getInt(ARG_SECTION_NUMBER);
 
       //Get Application Singleton
       mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
-
-      EditText editText = (EditText) rootView.findViewById(R.id.editText);
-      editText.append("Hello Koakh");
-      editText.scrollTo(0, Integer.MAX_VALUE);
-      mApp.setEditTextLog(editText);
 
       return rootView;
     }
@@ -237,15 +233,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-      View rootView = inflater.inflate(R.layout.fragment_log, container, false);
+      View rootView = inflater.inflate(R.layout.fragment_section2, container, false);
 
       //Get Application Singleton
       mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
 
-      //EditText editText = (EditText) rootView.findViewById(R.id.editText);
-      //editText.append("Hello Koakh");
-      //editText.scrollTo(0, Integer.MAX_VALUE);
-      //mApp.setEditTextLog(editText);
+      EditText editText = (EditText) rootView.findViewById(R.id.editText);
+      editText.append("Hello Koakh");
+      editText.scrollTo(0, Integer.MAX_VALUE);
+      mApp.setEditTextLog(editText);
 
       return rootView;
     }

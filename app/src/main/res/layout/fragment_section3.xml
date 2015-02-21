@@ -1,0 +1,20 @@
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".MainActivity$PlaceholderFragment"
+  style="@style/LinearLayout"
+  android:orientation="vertical"
+  >
+
+  <EditText
+    android:id="@+id/editText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textMultiLine"
+    android:ems="10"
+    android:typeface="normal"
+    android:autoText="false"
+    android:editable="false"
+    android:text="To bring everything discussed in this document together, here&apos;s an example of an activity using two fragments to create a two-pane layout. The activity below includes one fragment to show a list of Shakespeare play titles and another to show a summary of the play when selected from the list. It also demonstrates how to provide different configurations of the fragments, based on the screen configuration."/>
+
+</LinearLayout>
