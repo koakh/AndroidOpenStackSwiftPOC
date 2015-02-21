@@ -213,7 +213,8 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-          IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, API_URL_SWIFT);
+          String url = String.format("%s?format=json", API_URL_SWIFT);
+          IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, url);
 
 //Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             Callback<ListContainersResponse> listContainersCallback = new Callback<ListContainersResponse>() {
