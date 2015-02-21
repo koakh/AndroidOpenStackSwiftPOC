@@ -14,7 +14,8 @@ public interface IListContainers {
 
   @Headers("Content-Type: application/json")
   @GET("")
-  List<ListContainersResponse> listContainers(
+  //List<ListContainersResponse>
+  void listContainers(
     @Header("X-Auth-Token") String token,
     Callback<List<ListContainersResponse>> callback
   );

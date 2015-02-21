@@ -30,6 +30,8 @@ import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.IListContainers;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.ListContainersResponse;
 import com.koakh.swiftpoc.rest.swiftidentityauthenticate.AuthenticateResponse;
 import com.koakh.swiftpoc.rest.swiftidentityauthenticate.IAuthenticateService;
+import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager1;
+import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager2;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager3;
 
 public class MainActivity extends ActionBarActivity {
@@ -98,7 +100,7 @@ public class MainActivity extends ActionBarActivity {
   }
 
   //============================================================================================================================================================================
-  //Fragments
+  //FragmentPagerAdapter
 
   /**
    * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -150,104 +152,6 @@ public class MainActivity extends ActionBarActivity {
   }
 
   //============================================================================================================================================================================
-  //Fragment PlaceHolder
-
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragmentViewPager1 extends Fragment {
-    /**
-     * The fragment argument representing the section number for this fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    /**
-     * Application Singleton
-     */
-    private Singleton mApp;
-
-    /**
-     * Returns a new instance of this fragment for the given section number.
-     */
-    public static PlaceholderFragmentViewPager1 newInstance(int sectionNumber) {
-      PlaceholderFragmentViewPager1 fragment = new PlaceholderFragmentViewPager1();
-      Bundle args = new Bundle();
-      args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-      fragment.setArguments(args);
-      return fragment;
-    }
-
-    public PlaceholderFragmentViewPager1() {
-    }
-
-    /**
-     * To provide a layout for a fragment, you must implement the onCreateView() callback method,
-     * which the Android system calls when it's time for the fragment to draw its layout.
-     * Your implementation of this method must return a View that is the root of your fragment's layout.
-     */
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-      View rootView = inflater.inflate(R.layout.fragment_section1, container, false);
-      //if (savedInstanceState != null) int sectionNumber = savedInstanceState.getInt(ARG_SECTION_NUMBER);
-
-      //Get Application Singleton
-      mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
-
-      return rootView;
-    }
-  }
-
-  //============================================================================================================================================================================
-  //Fragment PlaceHolder
-
-  /**
-   * A placeholder fragment containing a simple view.
-   */
-  public static class PlaceholderFragmentViewPager2 extends Fragment {
-    /**
-     * The fragment argument representing the section number for this fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
-
-    /**
-     * Application Singleton
-     */
-    private Singleton mApp;
-
-    /**
-     * Returns a new instance of this fragment for the given section number.
-     */
-    public static PlaceholderFragmentViewPager2 newInstance(int sectionNumber) {
-      PlaceholderFragmentViewPager2 fragment = new PlaceholderFragmentViewPager2();
-      Bundle args = new Bundle();
-      args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-      fragment.setArguments(args);
-      return fragment;
-    }
-
-    public PlaceholderFragmentViewPager2() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-      View rootView = inflater.inflate(R.layout.fragment_section2, container, false);
-
-      //Get Application Singleton
-      mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
-
-      EditText editText = (EditText) rootView.findViewById(R.id.editText);
-      editText.append("Hello Koakh");
-      editText.scrollTo(0, Integer.MAX_VALUE);
-      mApp.setEditTextLog(editText);
-
-      return rootView;
-    }
-  }
-
-  //============================================================================================================================================================================
   //Events
 
   public void onClickButtonGetToken(View view) {
@@ -278,7 +182,7 @@ public class MainActivity extends ActionBarActivity {
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .build();
 
-          IAuthenticateService authenicateService = authenticateRestAdapter.create(IAuthenticateService.class);
+          IAuthenticateService authenticateService = authenticateRestAdapter.create(IAuthenticateService.class);
           Log.d(mApp.getTag(), jsonString);
 
           Callback<AuthenticateResponse> authenticateCallback = new Callback<AuthenticateResponse>() {
@@ -295,7 +199,7 @@ public class MainActivity extends ActionBarActivity {
               Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
             }
           };
-          authenicateService.authenticate(rawJsonBody, authenticateCallback);
+          authenticateService.authenticate(rawJsonBody, authenticateCallback);
 
         } catch (Exception ex) {
           ex.printStackTrace();
@@ -315,13 +219,15 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
               for (ListContainersResponse container : responseObject) {
-                mApp.getEditTextLog().append(container.getName());
+                //mApp.getEditTextLog().append(container.getName());
+                mApp.getEditTextLog().setText(container.getName());
               }
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
             @Override
             public void failure(RetrofitError error) {
+              Log.e(mApp.getTag(), "Failure!");
             }
           };
           listContainersService.listContainers(mApp.getAuthenticateToken(), listContainersCallback);
