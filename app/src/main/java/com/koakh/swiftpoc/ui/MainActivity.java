@@ -1,4 +1,4 @@
-package com.koakh.swiftpoc.app;
+package com.koakh.swiftpoc.ui;
 
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +22,7 @@ import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 
 import com.koakh.swiftpoc.R;
+import com.koakh.swiftpoc.app.Singleton;
 import com.koakh.swiftpoc.rest.ServiceGenerator;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.IListContainers;
 import com.koakh.swiftpoc.rest.swiftaccountslistcontainers.ListContainersResponse;
@@ -160,23 +161,26 @@ public class MainActivity extends ActionBarActivity {
         try {
           //TODO: Create a Auth Object , do not send BODY has JSON
           String jsonString = "{\"auth\": {\"tenantName\": \"admin\", \"passwordCredentials\":{\"username\": \"admin\", \"password\": \"kksc28kk\"}}}";
+          Log.d(mApp.getTag(), jsonString);
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
 
+          /*
           //TODO: Change with ServiceGenerator
           final RestAdapter authenticateRestAdapter = new RestAdapter.Builder()
             .setEndpoint(API_URL_IDENTITY)
             .setLogLevel(RestAdapter.LogLevel.FULL)
             .build();
-
           IAuthenticateService authenticateService = authenticateRestAdapter.create(IAuthenticateService.class);
-          Log.d(mApp.getTag(), jsonString);
+          */
 
+          IAuthenticateService authenticateService = ServiceGenerator.createService(IAuthenticateService.class, API_URL_IDENTITY);
           Callback<AuthenticateResponse> authenticateCallback = new Callback<AuthenticateResponse>() {
             @Override
             public void success(AuthenticateResponse responseObject, Response responseRaw) {
               mApp.setAuthenticateResponse(responseObject);
               Log.d(mApp.getTag(), String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
-              mApp.getEditTextLog().setText(mApp.getAuthenticateToken());
+              //mApp.getEditTextLog().setText(mApp.getAuthenticateToken());
+              mApp.getEditTextLog().setText(String.format("valid Toke for Authenticated User: %s", mApp.getAuthenticateResponse().getAccess().getUser().getName()));
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
