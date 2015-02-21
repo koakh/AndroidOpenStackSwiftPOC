@@ -227,7 +227,7 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void failure(RetrofitError error) {
-              Log.e(mApp.getTag(), "Failure!");
+              Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
             }
           };
           listContainersService.listContainers(mApp.getAuthenticateToken(), listContainersCallback);

@@ -13,8 +13,8 @@ import retrofit.http.Headers;
 public interface IListContainers {
 
   @Headers("Content-Type: application/json")
-  @GET("")
-  //List<ListContainersResponse>
+  //URL path "" must start with '/'.
+  @GET("/")
   void listContainers(
     @Header("X-Auth-Token") String token,
     Callback<List<ListContainersResponse>> callback
