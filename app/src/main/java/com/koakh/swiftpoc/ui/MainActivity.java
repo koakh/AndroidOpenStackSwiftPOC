@@ -215,13 +215,15 @@ public class MainActivity extends ActionBarActivity {
         try {
           IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, API_URL_SWIFT);
 
-          Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
+//Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
+            Callback<ListContainersResponse> listContainersCallback = new Callback<ListContainersResponse>() {
             @Override
-            public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
-              for (ListContainersResponse container : responseObject) {
-                //mApp.getEditTextLog().append(container.getName());
-                mApp.getEditTextLog().setText(container.getName());
-              }
+//public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
+            public void success(ListContainersResponse responseObject, Response responseRaw) {
+//              for (ListContainersResponse container : responseObject) {
+//                //mApp.getEditTextLog().append(container.getName());
+//                mApp.getEditTextLog().setText(container.getName());
+//              }
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
