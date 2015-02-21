@@ -190,7 +190,7 @@ public class MainActivity extends ActionBarActivity {
             public void success(AuthenticateResponse responseObject, Response responseRaw) {
               mApp.setAuthenticateResponse(responseObject);
               Log.d(mApp.getTag(), String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
-              mApp.getEditTextLog().append(mApp.getAuthenticateToken());
+              mApp.getEditTextLog().setText(mApp.getAuthenticateToken());
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
@@ -216,15 +216,12 @@ public class MainActivity extends ActionBarActivity {
           String url = String.format("%s?format=json", API_URL_SWIFT);
           IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, url);
 
-//Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
-            Callback<ListContainersResponse> listContainersCallback = new Callback<ListContainersResponse>() {
+          Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             @Override
-//public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
-            public void success(ListContainersResponse responseObject, Response responseRaw) {
-//              for (ListContainersResponse container : responseObject) {
-//                //mApp.getEditTextLog().append(container.getName());
-//                mApp.getEditTextLog().setText(container.getName());
-//              }
+            public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
+              for (ListContainersResponse container : responseObject) {
+                mApp.getEditTextLog().setText(container.getName());
+              }
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
