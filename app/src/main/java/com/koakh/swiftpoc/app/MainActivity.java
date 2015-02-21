@@ -158,18 +158,6 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-
-          /*
-          final RestAdapter restAdapter1 = new RestAdapter.Builder()
-            .setEndpoint("https://api.github.com")
-            .build();
-          IGitHubService service1 = restAdapter1.create(IGitHubService.class);
-          List<Object> repos = service1.listRepos("octocat");
-          Log.d(mApp.getTag(), repos.get(0).toString());
-          */
-
-          String url = String.format(API_URL_SWIFT, mApp.getTenant());
-
           //TODO: Create a Auth Object , do not send BODY has JSON
           String jsonString = "{\"auth\": {\"tenantName\": \"admin\", \"passwordCredentials\":{\"username\": \"admin\", \"password\": \"kksc28kk\"}}}";
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
@@ -211,14 +199,15 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-          String url = String.format(API_URL_SWIFT, mApp.getTenant() + "?format=json");
+          String url = String.format(API_URL_SWIFT, mApp.getTenant());
           IListContainers listContainersService = ServiceGenerator.createService(IListContainers.class, url);
 
           Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             @Override
             public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
+              mApp.getEditTextLog().setText("");
               for (ListContainersResponse container : responseObject) {
-                mApp.getEditTextLog().setText(container.getName());
+                mApp.getEditTextLog().append(container.getName() + "\n");
               }
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }

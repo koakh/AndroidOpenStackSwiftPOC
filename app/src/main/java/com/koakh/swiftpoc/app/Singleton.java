@@ -39,7 +39,7 @@ public class Singleton extends Application {
   }
 
   public String getTenant() {
-    return authenticateResponse.getAccess().getUser().getId();
+    return authenticateResponse.getAccess().getToken().getTenant().getId();
   }
 
   public EditText getEditTextLog() {
