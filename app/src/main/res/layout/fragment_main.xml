@@ -43,4 +43,13 @@
     android:text="@string/button_get_metadata"
     />
 
+  <EditText
+    android:id="@+id/editText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textMultiLine"
+    android:ems="10"
+    android:typeface="monospace"
+    />
+
 </LinearLayout>

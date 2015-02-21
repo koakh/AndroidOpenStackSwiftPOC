@@ -113,7 +113,18 @@ public class MainActivity extends ActionBarActivity {
     public Fragment getItem(int position) {
       // getItem is called to instantiate the fragment for the given page.
       // Return a PlaceholderFragment (defined as a static inner class below).
-      return PlaceholderFragment.newInstance(position + 1);
+      //return PlaceholderFragment.newInstance(position + 1);
+
+      switch(position) {
+        case 0:
+          return PlaceholderFragmentViewPager1.newInstance(1);
+        case 1:
+          return PlaceholderFragmentViewPager2.newInstance(2);
+        case 2:
+          return PlaceholderFragmentViewPager1.newInstance(3);
+        default:
+          return null;
+      }
     }
 
     @Override
@@ -143,7 +154,7 @@ public class MainActivity extends ActionBarActivity {
   /**
    * A placeholder fragment containing a simple view.
    */
-  public static class PlaceholderFragment extends Fragment {
+  public static class PlaceholderFragmentViewPager1 extends Fragment {
     /**
      * The fragment argument representing the section number for this fragment.
      */
@@ -157,20 +168,28 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Returns a new instance of this fragment for the given section number.
      */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-      PlaceholderFragment fragment = new PlaceholderFragment();
+    public static PlaceholderFragmentViewPager1 newInstance(int sectionNumber) {
+      PlaceholderFragmentViewPager1 fragment = new PlaceholderFragmentViewPager1();
       Bundle args = new Bundle();
       args.putInt(ARG_SECTION_NUMBER, sectionNumber);
       fragment.setArguments(args);
       return fragment;
     }
 
-    public PlaceholderFragment() {
+    public PlaceholderFragmentViewPager1() {
     }
+
+    /**
+     * To provide a layout for a fragment, you must implement the onCreateView() callback method,
+     * which the Android system calls when it's time for the fragment to draw its layout.
+     * Your implementation of this method must return a View that is the root of your fragment's layout.
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
       View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+      //if (savedInstanceState != null) int sectionNumber = savedInstanceState.getInt(ARG_SECTION_NUMBER);
 
       //Get Application Singleton
       mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
@@ -179,6 +198,54 @@ public class MainActivity extends ActionBarActivity {
       editText.append("Hello Koakh");
       editText.scrollTo(0, Integer.MAX_VALUE);
       mApp.setEditTextLog(editText);
+
+      return rootView;
+    }
+  }
+
+  //============================================================================================================================================================================
+  //Fragment PlaceHolder
+
+  /**
+   * A placeholder fragment containing a simple view.
+   */
+  public static class PlaceholderFragmentViewPager2 extends Fragment {
+    /**
+     * The fragment argument representing the section number for this fragment.
+     */
+    private static final String ARG_SECTION_NUMBER = "section_number";
+
+    /**
+     * Application Singleton
+     */
+    private Singleton mApp;
+
+    /**
+     * Returns a new instance of this fragment for the given section number.
+     */
+    public static PlaceholderFragmentViewPager2 newInstance(int sectionNumber) {
+      PlaceholderFragmentViewPager2 fragment = new PlaceholderFragmentViewPager2();
+      Bundle args = new Bundle();
+      args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+      fragment.setArguments(args);
+      return fragment;
+    }
+
+    public PlaceholderFragmentViewPager2() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+      View rootView = inflater.inflate(R.layout.fragment_log, container, false);
+
+      //Get Application Singleton
+      mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
+
+      //EditText editText = (EditText) rootView.findViewById(R.id.editText);
+      //editText.append("Hello Koakh");
+      //editText.scrollTo(0, Integer.MAX_VALUE);
+      //mApp.setEditTextLog(editText);
 
       return rootView;
     }
