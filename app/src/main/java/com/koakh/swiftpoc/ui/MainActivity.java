@@ -3,6 +3,7 @@ package com.koakh.swiftpoc.ui;
 import java.util.List;
 import java.util.Locale;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +32,7 @@ import com.koakh.swiftpoc.rest.swiftidentityauthenticate.IAuthenticateService;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager1;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager2;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager3;
+import com.koakh.swiftpoc.util.Utils;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -179,8 +181,8 @@ public class MainActivity extends ActionBarActivity {
             public void success(AuthenticateResponse responseObject, Response responseRaw) {
               mApp.setAuthenticateResponse(responseObject);
               Log.d(mApp.getTag(), String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
-              //mApp.getEditTextLog().setText(mApp.getAuthenticateToken());
-              mApp.getEditTextLog().setText(String.format("valid Toke for Authenticated User: %s", mApp.getAuthenticateResponse().getAccess().getUser().getName()));
+              mApp.getEditTextLog().append(String.format("valid Token for Authenticated User: %s", mApp.getAuthenticateResponse().getAccess().getUser().getName()) + "\n\n");
+              mApp.getEditTextLog().append(mApp.getAuthenticateToken() + "\n\n");
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
@@ -209,7 +211,6 @@ public class MainActivity extends ActionBarActivity {
           Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             @Override
             public void success(List<ListContainersResponse> responseObject, Response responseRaw) {
-              mApp.getEditTextLog().setText("");
               for (ListContainersResponse container : responseObject) {
                 mApp.getEditTextLog().append(container.getName() + "\n");
               }
@@ -219,6 +220,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
               Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
+
+              Utils.dialogBox(getApplicationContext(), "Error!", error.getCause().getMessage());
             }
           };
           listContainersService.listContainers(mApp.getAuthenticateToken(), listContainersCallback);
