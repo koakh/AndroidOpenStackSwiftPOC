@@ -51,7 +51,6 @@ public class PlaceholderFragmentViewPager1 extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
     View rootView = inflater.inflate(R.layout.fragment_section1, container, false);
-    //if (savedInstanceState != null) int sectionNumber = savedInstanceState.getInt(ARG_SECTION_NUMBER);
 
     //Get Application Singleton
     mApp = ((Singleton) getActivity().getApplication().getApplicationContext());

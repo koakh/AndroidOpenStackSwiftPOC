@@ -15,13 +15,6 @@
     />
 
   <Button
-    android:id="@+id/button_test_authentication"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/button_test_authentication"
-    />
-
-  <Button
     android:id="@+id/button_list_containers"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -30,10 +23,19 @@
     />
 
   <Button
+    android:id="@+id/button_list_container_objects"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_list_container_objects"
+    android:onClick="onClickButtonListContainerObjects"
+    />
+
+  <Button
     android:id="@+id/button_upload"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="@string/button_upload"
+    android:onClick="onClickButtonUpload"
     />
 
   <Button

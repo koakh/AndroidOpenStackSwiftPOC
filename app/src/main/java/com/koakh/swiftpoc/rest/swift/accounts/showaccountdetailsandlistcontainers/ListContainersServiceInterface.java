@@ -1,4 +1,4 @@
-package com.koakh.swiftpoc.rest.swiftaccountslistcontainers;
+package com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainers;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import retrofit.http.Headers;
 /**
  * Created by mario on 19/02/2015.
  */
-public interface IListContainers {
+public interface ListContainersServiceInterface {
 
   @Headers("Content-Type: application/json")
   @GET("/?format=json")
-  void listContainers(
+  void getContainers(
     @Header("X-Auth-Token") String token,
     Callback<List<ListContainersResponse>> callback
   );

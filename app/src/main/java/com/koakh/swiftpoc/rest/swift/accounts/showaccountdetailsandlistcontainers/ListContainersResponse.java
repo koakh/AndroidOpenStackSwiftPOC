@@ -1,4 +1,4 @@
-package com.koakh.swiftpoc.rest.swiftaccountslistcontainers;
+package com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainers;
 
 import com.google.gson.annotations.Expose;
 
