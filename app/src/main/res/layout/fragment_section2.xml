@@ -1,34 +1,22 @@
-<!--
-<LinearLayout
+<ScrollView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   tools:context=".MainActivity$PlaceholderFragment"
   style="@style/LinearLayout"
-  android:orientation="vertical"
-  >
--->
-  <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity$PlaceholderFragment"
-    style="@style/LinearLayout"
 
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <EditText
+    android:id="@+id/editText"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <EditText
-      android:id="@+id/editText"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:inputType="textMultiLine"
-      android:ems="10"
-      android:typeface="monospace"
-      android:includeFontPadding="false"
-      android:textIsSelectable="true"
-      android:editable="true"
-      android:isScrollContainer="true"
-      android:scrollbars="vertical"
-      />
-  </ScrollView>
-<!--
-</LinearLayout>
--->
+    android:layout_height="wrap_content"
+    android:inputType="textMultiLine"
+    android:ems="10"
+    android:typeface="monospace"
+    android:includeFontPadding="false"
+    android:textIsSelectable="true"
+    android:editable="true"
+    android:isScrollContainer="true"
+    android:scrollbars="vertical"
+    />
+</ScrollView>

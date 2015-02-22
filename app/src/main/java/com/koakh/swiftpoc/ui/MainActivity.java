@@ -3,7 +3,6 @@ package com.koakh.swiftpoc.ui;
 import java.util.List;
 import java.util.Locale;
 
-import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,9 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
@@ -32,7 +31,6 @@ import com.koakh.swiftpoc.rest.swiftidentityauthenticate.IAuthenticateService;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager1;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager2;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager3;
-import com.koakh.swiftpoc.util.Utils;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -57,8 +55,8 @@ public class MainActivity extends ActionBarActivity {
   //UI
   //private View mRootView;
 
-  private static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
-  private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_%s";
+  private static final String API_URL_IDENTITY = "http://192.168.1.31:5000/v2.0";
+  private static final String API_URL_SWIFT = "http://192.168.1.31:8080/v1/AUTH_%s";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -155,26 +153,20 @@ public class MainActivity extends ActionBarActivity {
   //Events
 
   public void onClickButtonGetToken(View view) {
-    Log.d(mApp.getTag(), "Tst Log");
+
+    final View thisButton = view;
 
     new Thread(new Runnable() {
       @Override
       public void run() {
         try {
-          //TODO: Create a Auth Object , do not send BODY has JSON
+
+          //TODO: Create a Auth Object, do not send BODY has JSON, Or leave it has Example
           String jsonString = "{\"auth\": {\"tenantName\": \"admin\", \"passwordCredentials\":{\"username\": \"admin\", \"password\": \"kksc28kk\"}}}";
           Log.d(mApp.getTag(), jsonString);
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
 
-          /*
-          //TODO: Change with ServiceGenerator
-          final RestAdapter authenticateRestAdapter = new RestAdapter.Builder()
-            .setEndpoint(API_URL_IDENTITY)
-            .setLogLevel(RestAdapter.LogLevel.FULL)
-            .build();
-          IAuthenticateService authenticateService = authenticateRestAdapter.create(IAuthenticateService.class);
-          */
-
+          //Get Service
           IAuthenticateService authenticateService = ServiceGenerator.createService(IAuthenticateService.class, API_URL_IDENTITY);
           Callback<AuthenticateResponse> authenticateCallback = new Callback<AuthenticateResponse>() {
             @Override
@@ -182,13 +174,16 @@ public class MainActivity extends ActionBarActivity {
               mApp.setAuthenticateResponse(responseObject);
               Log.d(mApp.getTag(), String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
               mApp.getEditTextLog().append(String.format("valid Token for Authenticated User: %s", mApp.getAuthenticateResponse().getAccess().getUser().getName()) + "\n\n");
-              mApp.getEditTextLog().append(mApp.getAuthenticateToken() + "\n\n");
+              mApp.getEditTextLog().append(mApp.getAuthenticateToken().substring(0, 125) + "...\n\n");
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
+              //Toggle Action Buttons
+              thisButton.setEnabled(false);
             }
 
             @Override
             public void failure(RetrofitError error) {
               Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
+              Toast.makeText(getApplicationContext(), error.getCause().getMessage(), Toast.LENGTH_LONG);
             }
           };
           authenticateService.authenticate(rawJsonBody, authenticateCallback);
@@ -220,8 +215,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
               Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
-
-              Utils.dialogBox(getApplicationContext(), "Error!", error.getCause().getMessage());
+              Toast.makeText(getApplicationContext(), error.getCause().getMessage(), Toast.LENGTH_LONG);
             }
           };
           listContainersService.listContainers(mApp.getAuthenticateToken(), listContainersCallback);
@@ -232,5 +226,9 @@ public class MainActivity extends ActionBarActivity {
       }
     }).start();
   }
+
+  //private void toggleButtons(Boolean authenticated ) {
+  //  Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.))
+  //}
 
 }

@@ -4,13 +4,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.koakh.swiftpoc.R;
-
 /**
  * Created by mario on 21/02/2015.
  */
 public class Utils {
 
+  /**
+   * http://developer.android.com/reference/android/app/AlertDialog.Builder.html
+   * @param context
+   * @param title
+   * @param message
+   */
   public static void dialogBox(Context context, String title, String message) {
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
     alertDialogBuilder.setTitle(title);
