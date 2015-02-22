@@ -3,7 +3,7 @@ package com.koakh.swiftpoc.app;
 import android.app.Application;
 import android.widget.EditText;
 
-import com.koakh.swiftpoc.rest.swiftidentityauthenticate.AuthenticateResponse;
+import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateResponse;
 
 /**
  * Created by mario on 15/02/2015.
