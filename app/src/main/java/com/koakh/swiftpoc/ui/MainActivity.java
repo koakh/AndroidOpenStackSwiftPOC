@@ -354,7 +354,6 @@ public class MainActivity extends ActionBarActivity {
                 Log.d(mApp.getTag(), file.getAbsolutePath() + " dont exists");
                 mApp.getEditTextLog().append(file.getAbsolutePath() + " dont exists");
               }
-
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 

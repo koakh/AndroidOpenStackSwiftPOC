@@ -4,9 +4,7 @@ import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.Header;
-import retrofit.http.Multipart;
 import retrofit.http.PUT;
-import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.mime.TypedFile;
 
@@ -16,7 +14,7 @@ import retrofit.mime.TypedFile;
 
 /**
  * Retrofit: How to upload/post a file
- *  https://medium.com/@giuder91/retrofit-how-to-upload-post-a-file-46f28fe2a37e
+ * https://medium.com/@giuder91/retrofit-how-to-upload-post-a-file-46f28fe2a37e
  */
 
 /**
