@@ -12,10 +12,12 @@ import retrofit.http.POST;
  */
 
 public interface AuthenticateServiceInterface {
-  @Headers("Content-Type: application/json")
+  //In requestInterceptor
+  //@Headers("Content-Type: application/json")
   @POST("/tokens")
   void authenticateUser(
     @Body TypedInput rawJsonBody,
     Callback<AuthenticateResponse> callback
   );
+
 }

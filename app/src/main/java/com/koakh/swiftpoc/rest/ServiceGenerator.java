@@ -2,6 +2,7 @@ package com.koakh.swiftpoc.rest;
 
 import com.squareup.okhttp.OkHttpClient;
 
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
@@ -15,14 +16,25 @@ public class ServiceGenerator {
   }
 
   public static <S> S createService(Class<S> serviceClass, String baseUrl) {
+
+    RequestInterceptor requestInterceptor = new RequestInterceptor() {
+      @Override
+      public void intercept(RequestInterceptor.RequestFacade request) {
+        request.addHeader("Content-Type", "application/json");
+      }
+    };
+
     RestAdapter.Builder builder = new RestAdapter.Builder()
       .setEndpoint(baseUrl)
       .setLogLevel(RestAdapter.LogLevel.FULL)
+      .setRequestInterceptor(requestInterceptor)
       .setClient(
         new OkClient(new OkHttpClient())
       );
+
     RestAdapter adapter = builder.build();
 
     return adapter.create(serviceClass);
   }
+
 }

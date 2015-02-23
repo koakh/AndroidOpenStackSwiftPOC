@@ -15,11 +15,11 @@ import retrofit.http.Path;
  */
 public interface ContainerDetailsAndObjectsServiceInterface {
 
-  @Headers("Content-Type: application/json")
   @GET("/{container}/?format=json")
   void getContainerDetails(
-    @Header("X-Auth-Token") String token,
+    @Header("X-Auth-Token") String xAuthToken,
     @Path("container") String container,
     Callback<List<ContainerDetailsAndObjectsResponse>> callback
   );
+
 }

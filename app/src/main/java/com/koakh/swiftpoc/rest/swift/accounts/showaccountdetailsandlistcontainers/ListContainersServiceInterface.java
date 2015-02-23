@@ -12,10 +12,10 @@ import retrofit.http.Headers;
  */
 public interface ListContainersServiceInterface {
 
-  @Headers("Content-Type: application/json")
   @GET("/?format=json")
   void getContainers(
-    @Header("X-Auth-Token") String token,
+    @Header("X-Auth-Token") String xAuthToken,
     Callback<List<ListContainersResponse>> callback
   );
+
 }

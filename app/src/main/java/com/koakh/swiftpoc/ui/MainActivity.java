@@ -22,10 +22,12 @@ import com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainer
 import com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainers.ListContainersServiceInterface;
 import com.koakh.swiftpoc.rest.swift.containers.showcontainerdetailsandlistobjects.ContainerDetailsAndObjectsResponse;
 import com.koakh.swiftpoc.rest.swift.containers.showcontainerdetailsandlistobjects.ContainerDetailsAndObjectsServiceInterface;
+import com.koakh.swiftpoc.rest.swift.objects.createorreplaceobject.CreateOrReplaceObjectServiceInterface;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager1;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager2;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager3;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +35,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedFile;
 import retrofit.mime.TypedInput;
 
 public class MainActivity extends ActionBarActivity {
@@ -74,7 +77,7 @@ public class MainActivity extends ActionBarActivity {
     mViewPager = (ViewPager) findViewById(R.id.pager);
     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-    Button ButtonGetToken = (Button) findViewById(R.id.button_get_token);
+    //Button ButtonGetToken = (Button) findViewById(R.id.button_get_token);
 
     //Get Application Singleton
     mApp = ((Singleton) this.getApplicationContext());
@@ -212,6 +215,7 @@ public class MainActivity extends ActionBarActivity {
               for (ListContainersResponse container : responseObject) {
                 mApp.getEditTextLog().append(container.getName() + "\n");
               }
+              mApp.getEditTextLog().append("\n");
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
@@ -243,6 +247,7 @@ public class MainActivity extends ActionBarActivity {
               for (ContainerDetailsAndObjectsResponse object : responseObject) {
                 mApp.getEditTextLog().append(object.getName() + "\n");
               }
+              mApp.getEditTextLog().append("\n");
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
@@ -254,7 +259,6 @@ public class MainActivity extends ActionBarActivity {
           service.getContainerDetails(mApp.getAuthenticateToken(), "container", callback);
           service.getContainerDetails(mApp.getAuthenticateToken(), "containerfromapi", callback);
           service.getContainerDetails(mApp.getAuthenticateToken(), "containerfromapinew", callback);
-
         } catch (Exception ex) {
           ex.printStackTrace();
         }
@@ -263,6 +267,40 @@ public class MainActivity extends ActionBarActivity {
   }
 
   public void onClickButtonUpload(View view) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          String url = String.format(API_URL_SWIFT, mApp.getTenant());
+          CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(CreateOrReplaceObjectServiceInterface.class, url);
+
+          Callback<Response> callback = new Callback<Response>() {
+            @Override
+            public void success(Response responseObject, Response responseRaw) {
+              String eTag = responseObject.getHeaders().get(2).getValue();
+              int status = responseObject.getStatus();//201
+              String reason = responseObject.getReason()//Created
+              mApp.getEditTextLog().append(String.format("status:[%d], reason:[%s], eTag:[%s]\n\n", status, reason, eTag);
+              mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+              showRetrofitError(error);
+            }
+          };
+
+          File file = new File("/mnt/sdcard/WallpapersHD/hd_wallpaper_9469.jpg");
+          if (file.exists()) {
+            TypedFile typedFile = new TypedFile("image/*", file);
+            service.uploadFile(mApp.getAuthenticateToken(), file.length(), "container", file.getName(), typedFile, callback);
+          }
+
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }).start();
   }
 
   private void showRetrofitError(RetrofitError error) {
