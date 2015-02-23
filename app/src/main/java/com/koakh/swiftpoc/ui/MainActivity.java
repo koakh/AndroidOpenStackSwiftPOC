@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.koakh.swiftpoc.R;
@@ -65,8 +64,8 @@ public class MainActivity extends ActionBarActivity {
   /**
    * Constants
    */
-  private static final String API_URL_IDENTITY = "http://192.168.1.31:5000/v2.0";
-  private static final String API_URL_SWIFT = "http://192.168.1.31:8080/v1/AUTH_%s";
+  private static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
+  private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_%s";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -328,10 +327,11 @@ public class MainActivity extends ActionBarActivity {
               Log.d(mApp.getTag(), message);
               mApp.getEditTextLog().append(message);
 
-              //Getting the bytes from the body, This will return byte array that you will write on the file system
+              //Getting the bytes(filecontent) from the body,
+              //This will return byte array that you will write on the file system
               byte[] bytes = ((TypedByteArray) responseObject.getBody()).getBytes();
 
-              File file = new File("/mnt/sdcard/Temp/downloadedFile.jpg");
+              File file = new File("/mnt/sdcard/Temp/SwiftPOC01.zip");
               try {
                 FileOutputStream fos = new FileOutputStream(file);
                 try {
@@ -344,6 +344,17 @@ public class MainActivity extends ActionBarActivity {
               } catch (FileNotFoundException e) {
                 e.printStackTrace();
               }
+
+              if (file.exists()) {
+                Log.d(mApp.getTag(), file.getAbsolutePath() + " exists");
+                mApp.getEditTextLog().append(file.getAbsolutePath() + " exists");
+              }
+              else
+              {
+                Log.d(mApp.getTag(), file.getAbsolutePath() + " dont exists");
+                mApp.getEditTextLog().append(file.getAbsolutePath() + " dont exists");
+              }
+
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
