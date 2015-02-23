@@ -278,8 +278,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void success(Response responseObject, Response responseRaw) {
               String eTag = responseObject.getHeaders().get(2).getValue();
-              int status = responseObject.getStatus();//201
-              String reason = responseObject.getReason()//Created
+              int status = responseObject.getStatus();        //201
+              String reason = responseObject.getReason();     //Created
               mApp.getEditTextLog().append(String.format("status:[%d], reason:[%s], eTag:[%s]\n\n", status, reason, eTag);
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
