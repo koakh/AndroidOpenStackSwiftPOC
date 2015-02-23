@@ -1,0 +1,1 @@
+- [MIME Types – Complete List](http://www.sitepoint.com/web-foundations/mime-types-complete-list/)

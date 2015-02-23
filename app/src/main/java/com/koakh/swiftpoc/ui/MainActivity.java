@@ -23,11 +23,15 @@ import com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainer
 import com.koakh.swiftpoc.rest.swift.containers.showcontainerdetailsandlistobjects.ContainerDetailsAndObjectsResponse;
 import com.koakh.swiftpoc.rest.swift.containers.showcontainerdetailsandlistobjects.ContainerDetailsAndObjectsServiceInterface;
 import com.koakh.swiftpoc.rest.swift.objects.createorreplaceobject.CreateOrReplaceObjectServiceInterface;
+import com.koakh.swiftpoc.rest.swift.objects.getobjectcontentandmetadata.GetObjectContentAndMetadataServiceInterface;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager1;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager2;
 import com.koakh.swiftpoc.ui.fragments.PlaceholderFragmentViewPager3;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -158,7 +162,7 @@ public class MainActivity extends ActionBarActivity {
   }
 
   //============================================================================================================================================================================
-  //Events
+  //Click Events
 
   public void onClickButtonGetToken(View view) {
     final View thisButton = view;
@@ -266,7 +270,7 @@ public class MainActivity extends ActionBarActivity {
     }).start();
   }
 
-  public void onClickButtonUpload(View view) {
+  public void onClickButtonUploadFile(View view) {
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -280,7 +284,9 @@ public class MainActivity extends ActionBarActivity {
               String eTag = responseObject.getHeaders().get(2).getValue();
               int status = responseObject.getStatus();        //201
               String reason = responseObject.getReason();     //Created
-              mApp.getEditTextLog().append(String.format("status:[%d], reason:[%s], eTag:[%s]\n\n", status, reason, eTag);
+              String message = String.format("status:[%d]\nreason:[%s]\neTag:[%s]\n\n", status, reason, eTag);
+              Log.d(mApp.getTag(), message);
+              mApp.getEditTextLog().append(message);
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
 
@@ -290,7 +296,7 @@ public class MainActivity extends ActionBarActivity {
             }
           };
 
-          File file = new File("/mnt/sdcard/WallpapersHD/hd_wallpaper_9469.jpg");
+          File file = new File("/mnt/sdcard/WallpapersHD/hd_wallpaper_11910.jpg");
           if (file.exists()) {
             TypedFile typedFile = new TypedFile("image/*", file);
             service.uploadFile(mApp.getAuthenticateToken(), file.length(), "container", file.getName(), typedFile, callback);
@@ -302,6 +308,62 @@ public class MainActivity extends ActionBarActivity {
       }
     }).start();
   }
+
+  public void onClickButtonDownloadFile(View view) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          String url = String.format(API_URL_SWIFT, mApp.getTenant());
+          GetObjectContentAndMetadataServiceInterface service = ServiceGenerator.createService(GetObjectContentAndMetadataServiceInterface.class, url);
+
+          Callback<Response> callback = new Callback<Response>() {
+            @Override
+            public void success(Response responseObject, Response responseRaw) {
+              String eTag = responseObject.getHeaders().get(3).getValue();
+              int status = responseObject.getStatus();        //200
+              String reason = responseObject.getReason();     //OK
+              String contentLength = responseObject.getHeaders().get(0).getValue();
+              String message = String.format("status:[%d]\nreason:[%s]\neTag:[%s]\ncontentLength:[%s]\n\n", status, reason, eTag, contentLength);
+              Log.d(mApp.getTag(), message);
+              mApp.getEditTextLog().append(message);
+
+              //Getting the bytes from the body, This will return byte array that you will write on the file system
+              byte[] bytes = ((TypedByteArray) responseObject.getBody()).getBytes();
+
+              File file = new File("/mnt/sdcard/Temp/downloadedFile.jpg");
+              try {
+                FileOutputStream fos = new FileOutputStream(file);
+                try {
+                  fos.write(bytes);
+                  fos.flush();
+                  fos.close();
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              } catch (FileNotFoundException e) {
+                e.printStackTrace();
+              }
+              mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+              showRetrofitError(error);
+            }
+          };
+
+          service.downloadFile(mApp.getAuthenticateToken(), "container", "SwiftPOC01.zip", callback);
+
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }).start();
+  }
+
+  //============================================================================================================================================================================
+  //Helper Methods
 
   private void showRetrofitError(RetrofitError error) {
     Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));

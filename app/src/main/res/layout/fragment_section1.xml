@@ -31,11 +31,19 @@
     />
 
   <Button
-    android:id="@+id/button_upload"
+    android:id="@+id/button_upload_file"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="@string/button_upload"
-    android:onClick="onClickButtonUpload"
+    android:text="@string/button_upload_file"
+    android:onClick="onClickButtonUploadFile"
+    />
+
+  <Button
+    android:id="@+id/button_download_file"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_download_file"
+    android:onClick="onClickButtonDownloadFile"
     />
 
   <Button
