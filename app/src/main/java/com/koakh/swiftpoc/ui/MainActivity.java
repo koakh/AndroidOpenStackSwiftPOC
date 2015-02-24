@@ -290,7 +290,8 @@ public class MainActivity extends ActionBarActivity {
             }
           };
 
-          File file = new File("/mnt/sdcard/WallpapersHD/hd_wallpaper_11910.jpg");
+          //File file = new File("/mnt/sdcard/WallpapersHD/hd_wallpaper_11910.jpg");
+          File file = new File("/mnt/sdcard/NDrive/maps/PRT_IP.map");
           if (file.exists()) {
             TypedFile typedFile = new TypedFile("image/*", file);
             service.uploadFile(mApp.getAuthenticateToken(), file.length(), "container", file.getName(), typedFile, callback);

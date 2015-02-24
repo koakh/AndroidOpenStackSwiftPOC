@@ -52,7 +52,7 @@ public class UploadFileTask extends AsyncTask<String, Integer, Response> {
         public void transferred(long num) {
           int progress = (int) ((num / (float) totalSize) * 100);
           publishProgress(progress);
-          Log.d(mApp.TAG, String.format("Progress [%d]", progress));
+          //Log.d(mApp.TAG, String.format("Progress [%d]", progress));
         }
       };
 
@@ -70,7 +70,7 @@ public class UploadFileTask extends AsyncTask<String, Integer, Response> {
 
   @Override
   protected void onProgressUpdate(Integer... values) {
-    Log.d(mApp.TAG, String.format("progress[%d]", values[0]));
+    //Log.d(mApp.TAG, String.format("progress[%d]", values[0]));
     //do something with values[0], its the percentage so you can easily do
     //progressBar.setProgress(values[0]);
   }

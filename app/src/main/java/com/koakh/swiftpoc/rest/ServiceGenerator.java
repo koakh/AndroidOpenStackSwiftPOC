@@ -4,6 +4,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.client.Client;
 import retrofit.client.OkClient;
 
 /**
@@ -26,7 +27,7 @@ public class ServiceGenerator {
 
     RestAdapter.Builder builder = new RestAdapter.Builder()
       .setEndpoint(baseUrl)
-      .setLogLevel(RestAdapter.LogLevel.FULL)
+      .setLogLevel(RestAdapter.LogLevel.BASIC)
       .setRequestInterceptor(requestInterceptor)
       .setClient(
         new OkClient(new OkHttpClient())
