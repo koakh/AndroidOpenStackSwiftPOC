@@ -47,10 +47,27 @@
     />
 
   <Button
+    android:id="@+id/button_upload_files_asynctask"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_upload_files_asynctask"
+    android:onClick="onClickButtonUploadFilesAsyncTask"
+    />
+
+  <Button
+    android:id="@+id/button_download_files_asynctask"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_download_files_asynctask"
+    android:onClick="onClickButtonDownloadFilesAsyncTask"
+    />
+
+  <Button
     android:id="@+id/button_get_metadata"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="@string/button_get_metadata"
+    android:onClick="onClickButtonGetMetaData"
     />
 
 </LinearLayout>

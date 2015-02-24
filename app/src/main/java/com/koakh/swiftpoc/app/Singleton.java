@@ -10,7 +10,12 @@ import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateResponse;
  */
 public class Singleton extends Application {
 
-  public final String TAG = "SwiftPOC";
+  /**
+   * Constants
+   */
+  public static final String TAG = "SwiftPOC";
+  public static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
+  public static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_%s";
 
   /**
    * Swift/OpenStack
@@ -21,10 +26,6 @@ public class Singleton extends Application {
   private EditText editTextLog;
 
   public Singleton() {
-  }
-
-  public String getTag() {
-    return TAG;
   }
 
   public AuthenticateResponse getAuthenticateResponse() {

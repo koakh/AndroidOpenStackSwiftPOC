@@ -2,11 +2,11 @@ package com.koakh.swiftpoc.rest.swift.objects.createorreplaceobject;
 
 import retrofit.Callback;
 import retrofit.client.Response;
+import retrofit.mime.TypedFile;
 import retrofit.http.Body;
 import retrofit.http.Header;
 import retrofit.http.PUT;
 import retrofit.http.Path;
-import retrofit.mime.TypedFile;
 
 /**
  * Created by mario on 22/02/2015.
@@ -39,4 +39,12 @@ public interface CreateOrReplaceObjectServiceInterface {
     Callback<Response> callback
   );
 
+  @PUT("/{container}/{fileName}")
+  Response uploadFileAsyncTask(
+    @Header("X-Auth-Token") String xAuthToken,
+    @Header("Content-Length") Long contentLength,
+    @Path("container") String container,
+    @Path("fileName") String fileName,
+    @Body TypedFile typedFile
+  );
 }

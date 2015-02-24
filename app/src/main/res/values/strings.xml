@@ -18,8 +18,11 @@
   <string name="button_list_container_objects">List Container Objects</string>
   <string name="button_upload_file">Upload</string>
   <string name="button_download_file">Download</string>
+  <string name="button_upload_files_asynctask">Upload AsyncTask</string>
+  <string name="button_download_files_asynctask">Download AsyncTask</string>
   <string name="button_get_metadata">Get MetaData</string>
 
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

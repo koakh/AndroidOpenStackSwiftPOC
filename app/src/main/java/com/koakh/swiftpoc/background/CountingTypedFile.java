@@ -1,4 +1,6 @@
-package com.koakh.swiftpoc.rest;
+package com.koakh.swiftpoc.background;
+
+import com.koakh.swiftpoc.background.ProgressListenerInterface;
 
 import java.io.File;
 import java.io.FileInputStream;

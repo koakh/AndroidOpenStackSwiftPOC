@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.koakh.swiftpoc.R;
 import com.koakh.swiftpoc.app.Singleton;
+import com.koakh.swiftpoc.background.UploadFileTask;
 import com.koakh.swiftpoc.rest.ServiceGenerator;
 import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateResponse;
 import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateServiceInterface;
@@ -60,12 +61,6 @@ public class MainActivity extends ActionBarActivity {
 
   //Application Singleton
   private Singleton mApp;
-
-  /**
-   * Constants
-   */
-  private static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
-  private static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_%s";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -173,16 +168,16 @@ public class MainActivity extends ActionBarActivity {
 
           //TODO: Create a Auth Object, do not send BODY has JSON, Or leave it has Example
           String jsonString = "{\"auth\": {\"tenantName\": \"admin\", \"passwordCredentials\":{\"username\": \"admin\", \"password\": \"kksc28kk\"}}}";
-          Log.d(mApp.getTag(), jsonString);
+          Log.d(mApp.TAG, jsonString);
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
 
           //Get Service
-          AuthenticateServiceInterface authenticateService = ServiceGenerator.createService(AuthenticateServiceInterface.class, API_URL_IDENTITY);
+          AuthenticateServiceInterface authenticateService = ServiceGenerator.createService(AuthenticateServiceInterface.class, mApp.API_URL_IDENTITY);
           Callback<AuthenticateResponse> authenticateCallback = new Callback<AuthenticateResponse>() {
             @Override
             public void success(AuthenticateResponse responseObject, Response responseRaw) {
               mApp.setAuthenticateResponse(responseObject);
-              Log.d(mApp.getTag(), String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
+              Log.d(mApp.TAG, String.format("AuthenticateToken : [%s]", mApp.getAuthenticateToken()));
               mApp.getEditTextLog().append(String.format("valid Token for Authenticated User: %s", mApp.getAuthenticateResponse().getAccess().getUser().getName()) + "\n\n");
               mApp.getEditTextLog().append(mApp.getAuthenticateToken().substring(0, 125) + "...\n\n");
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
@@ -209,8 +204,8 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-          String url = String.format(API_URL_SWIFT, mApp.getTenant());
-          ListContainersServiceInterface listContainersService = ServiceGenerator.createService(ListContainersServiceInterface.class, url);
+          String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
+          ListContainersServiceInterface listContainersService = ServiceGenerator.createService(ListContainersServiceInterface.class, serviceUrl);
 
           Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             @Override
@@ -241,8 +236,8 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-          String url = String.format(API_URL_SWIFT, mApp.getTenant());
-          ContainerDetailsAndObjectsServiceInterface service = ServiceGenerator.createService(ContainerDetailsAndObjectsServiceInterface.class, url);
+          String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
+          ContainerDetailsAndObjectsServiceInterface service = ServiceGenerator.createService(ContainerDetailsAndObjectsServiceInterface.class, serviceUrl);
 
           Callback<List<ContainerDetailsAndObjectsResponse>> callback = new Callback<List<ContainerDetailsAndObjectsResponse>>() {
             @Override
@@ -274,8 +269,8 @@ public class MainActivity extends ActionBarActivity {
       @Override
       public void run() {
         try {
-          String url = String.format(API_URL_SWIFT, mApp.getTenant());
-          CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(CreateOrReplaceObjectServiceInterface.class, url);
+          String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
+          CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(CreateOrReplaceObjectServiceInterface.class, serviceUrl);
 
           Callback<Response> callback = new Callback<Response>() {
             @Override
@@ -284,7 +279,7 @@ public class MainActivity extends ActionBarActivity {
               int status = responseObject.getStatus();        //201
               String reason = responseObject.getReason();     //Created
               String message = String.format("status:[%d]\nreason:[%s]\neTag:[%s]\n\n", status, reason, eTag);
-              Log.d(mApp.getTag(), message);
+              Log.d(mApp.TAG, message);
               mApp.getEditTextLog().append(message);
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
             }
@@ -312,9 +307,11 @@ public class MainActivity extends ActionBarActivity {
     new Thread(new Runnable() {
       @Override
       public void run() {
+
         try {
-          String url = String.format(API_URL_SWIFT, mApp.getTenant());
-          GetObjectContentAndMetadataServiceInterface service = ServiceGenerator.createService(GetObjectContentAndMetadataServiceInterface.class, url);
+          String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
+
+          GetObjectContentAndMetadataServiceInterface service = ServiceGenerator.createService(GetObjectContentAndMetadataServiceInterface.class, serviceUrl);
 
           Callback<Response> callback = new Callback<Response>() {
             @Override
@@ -324,14 +321,15 @@ public class MainActivity extends ActionBarActivity {
               String reason = responseObject.getReason();     //OK
               String contentLength = responseObject.getHeaders().get(0).getValue();
               String message = String.format("status:[%d]\nreason:[%s]\neTag:[%s]\ncontentLength:[%s]\n\n", status, reason, eTag, contentLength);
-              Log.d(mApp.getTag(), message);
+              Log.d(mApp.TAG, message);
               mApp.getEditTextLog().append(message);
 
               //Getting the bytes(filecontent) from the body,
               //This will return byte array that you will write on the file system
               byte[] bytes = ((TypedByteArray) responseObject.getBody()).getBytes();
-
               File file = new File("/mnt/sdcard/Temp/SwiftPOC01.zip");
+
+              //Save to Disk
               try {
                 FileOutputStream fos = new FileOutputStream(file);
                 try {
@@ -346,12 +344,12 @@ public class MainActivity extends ActionBarActivity {
               }
 
               if (file.exists()) {
-                Log.d(mApp.getTag(), file.getAbsolutePath() + " exists");
+                Log.d(mApp.TAG, file.getAbsolutePath() + " exists");
                 mApp.getEditTextLog().append(file.getAbsolutePath() + " exists");
               }
               else
               {
-                Log.d(mApp.getTag(), file.getAbsolutePath() + " dont exists");
+                Log.d(mApp.TAG, file.getAbsolutePath() + " dont exists");
                 mApp.getEditTextLog().append(file.getAbsolutePath() + " dont exists");
               }
               mApp.getEditTextLog().scrollTo(0, Integer.MAX_VALUE);
@@ -372,11 +370,22 @@ public class MainActivity extends ActionBarActivity {
     }).start();
   }
 
+  public void onClickButtonUploadFilesAsyncTask(View view) {
+    UploadFileTask sendFileTask = new UploadFileTask(this, "container", "/mnt/sdcard/NDrive/maps/PRT_IP.map", "*/*");
+    sendFileTask.execute();
+  }
+
+  public void onClickButtonDownloadFilesAsyncTask(View view) {
+  }
+
+  public void onClickButtonGetMetaData(View view) {
+  }
+
   //============================================================================================================================================================================
   //Helper Methods
 
   private void showRetrofitError(RetrofitError error) {
-    Log.e(mApp.getTag(), String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
+    Log.e(mApp.TAG, String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
     Toast.makeText(getApplicationContext(), error.getCause().getMessage(), Toast.LENGTH_LONG);
   }
 

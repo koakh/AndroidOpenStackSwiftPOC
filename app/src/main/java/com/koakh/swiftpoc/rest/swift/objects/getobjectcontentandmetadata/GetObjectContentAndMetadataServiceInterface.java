@@ -14,6 +14,7 @@ import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Path;
+import retrofit.mime.TypedFile;
 
 /**
  * Get object content and metadata
@@ -35,4 +36,11 @@ public interface GetObjectContentAndMetadataServiceInterface {
     Callback<Response> callback
   );
 
+  @GET("/{container}/{fileName}")
+  Response downloadFileTask(
+    @Header("X-Auth-Token") String xAuthToken,
+    @Path("container") String container,
+    @Path("fileName") String fileName,
+    TypedFile typedFile
+  );
 }
