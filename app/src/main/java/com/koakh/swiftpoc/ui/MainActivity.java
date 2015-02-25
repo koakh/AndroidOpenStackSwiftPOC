@@ -1,5 +1,6 @@
 package com.koakh.swiftpoc.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -61,6 +62,7 @@ public class MainActivity extends ActionBarActivity {
 
   //Application Singleton
   private Singleton mApp;
+  private Context mContext;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +77,10 @@ public class MainActivity extends ActionBarActivity {
     mViewPager = (ViewPager) findViewById(R.id.pager);
     mViewPager.setAdapter(mSectionsPagerAdapter);
 
-    //Button ButtonGetToken = (Button) findViewById(R.id.button_get_token);
-
-    //Get Application Singleton
+    //Singleton
     mApp = ((Singleton) this.getApplicationContext());
+    mApp.setContext(this);
+    mContext = this;
   }
 
   @Override
@@ -122,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
       // Return a PlaceholderFragment (defined as a static inner class below).
       //return PlaceholderFragment.newInstance(position + 1);
 
-      switch(position) {
+      switch (position) {
         case 0:
           return PlaceholderFragmentViewPager1.newInstance(1);
         case 1:
@@ -172,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
           TypedInput rawJsonBody = new TypedByteArray("application/json", jsonString.getBytes("UTF-8"));
 
           //Get Service
-          AuthenticateServiceInterface authenticateService = ServiceGenerator.createService(AuthenticateServiceInterface.class, mApp.API_URL_IDENTITY);
+          AuthenticateServiceInterface authenticateService = ServiceGenerator.createService(mContext, AuthenticateServiceInterface.class, mApp.API_URL_IDENTITY);
           Callback<AuthenticateResponse> authenticateCallback = new Callback<AuthenticateResponse>() {
             @Override
             public void success(AuthenticateResponse responseObject, Response responseRaw) {
@@ -205,7 +207,7 @@ public class MainActivity extends ActionBarActivity {
       public void run() {
         try {
           String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
-          ListContainersServiceInterface listContainersService = ServiceGenerator.createService(ListContainersServiceInterface.class, serviceUrl);
+          ListContainersServiceInterface listContainersService = ServiceGenerator.createService(mContext, ListContainersServiceInterface.class, serviceUrl);
 
           Callback<List<ListContainersResponse>> listContainersCallback = new Callback<List<ListContainersResponse>>() {
             @Override
@@ -224,8 +226,12 @@ public class MainActivity extends ActionBarActivity {
           };
           listContainersService.getContainers(mApp.getAuthenticateToken(), listContainersCallback);
 
-        } catch (Exception ex) {
+        } catch (RetrofitError ex) {
           ex.printStackTrace();
+          //Log.d(mApp.TAG, String.format("Exception: [%s]", ex.getMessage()));
+          //Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG);
+          showRetrofitError(ex);
+
         }
       }
     }).start();
@@ -237,7 +243,7 @@ public class MainActivity extends ActionBarActivity {
       public void run() {
         try {
           String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
-          ContainerDetailsAndObjectsServiceInterface service = ServiceGenerator.createService(ContainerDetailsAndObjectsServiceInterface.class, serviceUrl);
+          ContainerDetailsAndObjectsServiceInterface service = ServiceGenerator.createService(mContext, ContainerDetailsAndObjectsServiceInterface.class, serviceUrl);
 
           Callback<List<ContainerDetailsAndObjectsResponse>> callback = new Callback<List<ContainerDetailsAndObjectsResponse>>() {
             @Override
@@ -270,7 +276,7 @@ public class MainActivity extends ActionBarActivity {
       public void run() {
         try {
           String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
-          CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(CreateOrReplaceObjectServiceInterface.class, serviceUrl);
+          CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(mContext, CreateOrReplaceObjectServiceInterface.class, serviceUrl);
 
           Callback<Response> callback = new Callback<Response>() {
             @Override
@@ -312,7 +318,7 @@ public class MainActivity extends ActionBarActivity {
         try {
           String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
 
-          GetObjectContentAndMetadataServiceInterface service = ServiceGenerator.createService(GetObjectContentAndMetadataServiceInterface.class, serviceUrl);
+          GetObjectContentAndMetadataServiceInterface service = ServiceGenerator.createService(mContext, GetObjectContentAndMetadataServiceInterface.class, serviceUrl);
 
           Callback<Response> callback = new Callback<Response>() {
             @Override
@@ -347,9 +353,7 @@ public class MainActivity extends ActionBarActivity {
               if (file.exists()) {
                 Log.d(mApp.TAG, file.getAbsolutePath() + " exists");
                 mApp.getEditTextLog().append(file.getAbsolutePath() + " exists");
-              }
-              else
-              {
+              } else {
                 Log.d(mApp.TAG, file.getAbsolutePath() + " dont exists");
                 mApp.getEditTextLog().append(file.getAbsolutePath() + " dont exists");
               }

@@ -57,7 +57,7 @@ public class UploadFileTask extends AsyncTask<String, Integer, Response> {
       };
 
       String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
-      CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(CreateOrReplaceObjectServiceInterface.class, serviceUrl);
+      CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(mApp.getContext(), CreateOrReplaceObjectServiceInterface.class, serviceUrl);
       CountingTypedFile countingTypedFile = new CountingTypedFile(mMimeType, file, listener);
       Response response = service.uploadFileAsyncTask(mApp.getAuthenticateToken(), file.length(), mContainer, mFileName, countingTypedFile);
 
@@ -70,7 +70,7 @@ public class UploadFileTask extends AsyncTask<String, Integer, Response> {
 
   @Override
   protected void onProgressUpdate(Integer... values) {
-    //Log.d(mApp.TAG, String.format("progress[%d]", values[0]));
+    Log.d(mApp.TAG, String.format("progress[%d]", values[0]));
     //do something with values[0], its the percentage so you can easily do
     //progressBar.setProgress(values[0]);
   }

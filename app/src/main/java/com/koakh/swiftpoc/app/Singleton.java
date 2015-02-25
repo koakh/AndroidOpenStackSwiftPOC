@@ -1,6 +1,7 @@
 package com.koakh.swiftpoc.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.widget.EditText;
 
 import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateResponse;
@@ -17,15 +18,24 @@ public class Singleton extends Application {
   public static final String API_URL_IDENTITY = "http://koakh.com:5000/v2.0";
   public static final String API_URL_SWIFT = "http://koakh.com:8080/v1/AUTH_%s";
 
+  private Context mContext;
+
   /**
    * Swift/OpenStack
    */
   //Store FULL Authentication Response, Includes all Details, ex Token used for all Request
   private AuthenticateResponse authenticateResponse;
 
-  private EditText editTextLog;
+  private static EditText editTextLog;
 
   public Singleton() {
+  }
+
+  public Context getContext() {
+    return mContext;
+  }
+  public void setContext(Context context) {
+    this.mContext = context;
   }
 
   public AuthenticateResponse getAuthenticateResponse() {
@@ -44,10 +54,10 @@ public class Singleton extends Application {
   }
 
   public EditText getEditTextLog() {
-    return editTextLog;
+    return Singleton.editTextLog;
   }
 
   public void setEditTextLog(EditText editTextLog) {
-    this.editTextLog = editTextLog;
+    Singleton.editTextLog = editTextLog;
   }
 }

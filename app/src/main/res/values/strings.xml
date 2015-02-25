@@ -25,4 +25,10 @@
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
 
+  <!-- Retrofit Error Handling -->
+  <string name="error_network">Error Network</string>
+  <string name="error_no_response">Error No Response</string>
+  <string name="error_network_http_error">Error Network HHTP Error</string>
+  <string name="error_unknown">Error Unknown</string>
+
 </resources>

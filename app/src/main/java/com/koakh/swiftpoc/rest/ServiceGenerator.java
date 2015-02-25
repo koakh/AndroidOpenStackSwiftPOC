@@ -1,6 +1,10 @@
 package com.koakh.swiftpoc.rest;
 
+import android.content.Context;
+
 import com.squareup.okhttp.OkHttpClient;
+
+import java.util.concurrent.TimeUnit;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -16,7 +20,7 @@ public class ServiceGenerator {
   private ServiceGenerator() {
   }
 
-  public static <S> S createService(Class<S> serviceClass, String baseUrl) {
+  public static <S> S createService(Context context, Class<S> serviceClass, String baseUrl) {
 
     RequestInterceptor requestInterceptor = new RequestInterceptor() {
       @Override
@@ -25,13 +29,16 @@ public class ServiceGenerator {
       }
     };
 
+    //Setup OkHttpClient
+    OkHttpClient client = new OkHttpClient();
+    client.setConnectTimeout(10, TimeUnit.SECONDS);
+
     RestAdapter.Builder builder = new RestAdapter.Builder()
       .setEndpoint(baseUrl)
-      .setLogLevel(RestAdapter.LogLevel.BASIC)
+      .setLogLevel(RestAdapter.LogLevel.FULL)
       .setRequestInterceptor(requestInterceptor)
-      .setClient(
-        new OkClient(new OkHttpClient())
-      );
+      .setErrorHandler(new ServiceErrorHandler(context))
+      .setClient(new OkClient(client));
 
     RestAdapter adapter = builder.build();
 
