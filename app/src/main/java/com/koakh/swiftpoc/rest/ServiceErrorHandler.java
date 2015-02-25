@@ -2,7 +2,6 @@ package com.koakh.swiftpoc.rest;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.koakh.swiftpoc.R;
 import com.koakh.swiftpoc.app.Singleton;
@@ -17,6 +16,8 @@ import retrofit.RetrofitError;
 //
 
 /**
+ * benvium / retrofit-custom-error-handling.java
+ * https://gist.github.com/benvium/66bf24e0de80d609dac0#file-retrofit-custom-error-handling-java
  * Converts the complex error structure into a single string you can get with error.getLocalizedMessage() in Retrofit error handlers.
  * Also deals with there being no network available
  *
@@ -24,11 +25,11 @@ import retrofit.RetrofitError;
  */
 class ServiceErrorHandler implements ErrorHandler {
 
-  private Context context;
+  private Context mContext;
   private Singleton mApp;
 
   public ServiceErrorHandler(Context context) {
-    this.context = context;
+    this.mContext = context;
     mApp = ((Singleton) context.getApplicationContext());
   }
 
@@ -38,10 +39,10 @@ class ServiceErrorHandler implements ErrorHandler {
     String errorDescription;
 
     if (cause.getKind() == RetrofitError.Kind.NETWORK) {
-      errorDescription = context.getString(R.string.error_network) + " : " + cause.getMessage();
+      errorDescription = mContext.getString(R.string.error_network) + " : " + cause.getMessage();
     } else {
       if (cause.getResponse() == null) {
-        errorDescription = context.getString(R.string.error_no_response);
+        errorDescription = mContext.getString(R.string.error_no_response);
       } else {
         // Error message handling - return a simple error to Retrofit handlers..
         try {
@@ -49,10 +50,10 @@ class ServiceErrorHandler implements ErrorHandler {
           errorDescription = errorResponse.error.data.message;
         } catch (Exception ex) {
           try {
-            errorDescription = context.getString(R.string.error_network_http_error, cause.getResponse().getStatus());
+            errorDescription = mContext.getString(R.string.error_network_http_error, cause.getResponse().getStatus());
           } catch (Exception ex2) {
             Log.e(mApp.TAG, "handleError: " + ex2.getLocalizedMessage());
-            errorDescription = context.getString(R.string.error_unknown);
+            errorDescription = mContext.getString(R.string.error_unknown);
           }
         }
       }
