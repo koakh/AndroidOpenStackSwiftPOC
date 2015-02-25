@@ -57,8 +57,7 @@ class ServiceErrorHandler implements ErrorHandler {
         }
       }
     }
-    //Toast.makeText(context, errorDescription, Toast.LENGTH_LONG).show();
-    Log.e(mApp.TAG, errorDescription);
+    //Log.e(mApp.TAG, errorDescription);
     return new Exception(errorDescription);
   }
 }

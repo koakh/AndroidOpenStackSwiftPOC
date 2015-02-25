@@ -31,7 +31,7 @@ public class ServiceGenerator {
 
     //Setup OkHttpClient
     OkHttpClient client = new OkHttpClient();
-    client.setConnectTimeout(10, TimeUnit.SECONDS);
+    client.setConnectTimeout(30, TimeUnit.SECONDS);
 
     RestAdapter.Builder builder = new RestAdapter.Builder()
       .setEndpoint(baseUrl)
