@@ -386,8 +386,9 @@ public class MainActivity extends ActionBarActivity {
   //Helper Methods
 
   private void showRetrofitError(RetrofitError error) {
-    Log.e(mApp.TAG, String.format("RetrofitError Error : [%s]", error.getLocalizedMessage()/*error.getCause().getMessage()*/));
-    Toast.makeText(getApplicationContext(), error.getCause().getMessage(), Toast.LENGTH_LONG);
+    String message = error.getLocalizedMessage()/*error.getCause().getMessage()*/;
+    Log.e(mApp.TAG, String.format("RetrofitError Error : [%s]", message));
+    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
   }
 
   //private void toggleButtons(Boolean authenticated ) {

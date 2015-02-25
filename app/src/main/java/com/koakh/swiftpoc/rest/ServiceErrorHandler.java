@@ -38,7 +38,7 @@ class ServiceErrorHandler implements ErrorHandler {
     String errorDescription;
 
     if (cause.getKind() == RetrofitError.Kind.NETWORK) {
-      errorDescription = context.getString(R.string.error_network);
+      errorDescription = context.getString(R.string.error_network) + " : " + cause.getMessage();
     } else {
       if (cause.getResponse() == null) {
         errorDescription = context.getString(R.string.error_no_response);
@@ -57,6 +57,8 @@ class ServiceErrorHandler implements ErrorHandler {
         }
       }
     }
+    //Toast.makeText(context, errorDescription, Toast.LENGTH_LONG).show();
+    Log.e(mApp.TAG, errorDescription);
     return new Exception(errorDescription);
   }
 }
