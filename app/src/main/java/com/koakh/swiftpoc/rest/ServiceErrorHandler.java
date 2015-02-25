@@ -2,6 +2,7 @@ package com.koakh.swiftpoc.rest;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.koakh.swiftpoc.R;
 import com.koakh.swiftpoc.app.Singleton;
@@ -33,6 +34,7 @@ class ServiceErrorHandler implements ErrorHandler {
 
   @Override
   public Throwable handleError(RetrofitError cause) {
+
     String errorDescription;
 
     if (cause.getKind() == RetrofitError.Kind.NETWORK) {

@@ -226,12 +226,8 @@ public class MainActivity extends ActionBarActivity {
           };
           listContainersService.getContainers(mApp.getAuthenticateToken(), listContainersCallback);
 
-        } catch (RetrofitError ex) {
+        } catch (Exception ex) {
           ex.printStackTrace();
-          //Log.d(mApp.TAG, String.format("Exception: [%s]", ex.getMessage()));
-          //Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG);
-          showRetrofitError(ex);
-
         }
       }
     }).start();
@@ -390,7 +386,7 @@ public class MainActivity extends ActionBarActivity {
   //Helper Methods
 
   private void showRetrofitError(RetrofitError error) {
-    Log.e(mApp.TAG, String.format("RetrofitError Error : [%s]", error.getCause().getMessage()));
+    Log.e(mApp.TAG, String.format("RetrofitError Error : [%s]", error.getLocalizedMessage()/*error.getCause().getMessage()*/));
     Toast.makeText(getApplicationContext(), error.getCause().getMessage(), Toast.LENGTH_LONG);
   }
 
