@@ -59,7 +59,7 @@ public class UploadFileTask extends AsyncTask<String, Integer, Response> {
       String serviceUrl = String.format(mApp.API_URL_SWIFT, mApp.getTenant());
       CreateOrReplaceObjectServiceInterface service = ServiceGenerator.createService(mApp.getContext(), CreateOrReplaceObjectServiceInterface.class, serviceUrl);
       CountingTypedFile countingTypedFile = new CountingTypedFile(mMimeType, file, listener);
-      Response response = service.uploadFileAsyncTask(mApp.getAuthenticateToken(), file.length(), mContainer, mFileName, countingTypedFile);
+      Response response = service.uploadFileAsyncTask(mApp.getAuthenticateToken(), file.length(), mContainer, file.getName(), countingTypedFile);
 
       return response;
     }

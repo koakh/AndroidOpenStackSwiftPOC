@@ -35,7 +35,7 @@ public class ServiceGenerator {
 
     RestAdapter.Builder builder = new RestAdapter.Builder()
       .setEndpoint(baseUrl)
-      .setLogLevel(RestAdapter.LogLevel.BASIC)
+      .setLogLevel(RestAdapter.LogLevel.NONE)
       .setRequestInterceptor(requestInterceptor)
       .setErrorHandler(new ServiceErrorHandler(context))
       .setClient(new OkClient(client));
