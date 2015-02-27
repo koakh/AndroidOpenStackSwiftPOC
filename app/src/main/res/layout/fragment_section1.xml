@@ -20,6 +20,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_list_containers"
     android:onClick="onClickButtonListContainers"
+    android:enabled="true"
     />
 
   <Button
@@ -28,6 +29,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_list_container_objects"
     android:onClick="onClickButtonListContainerObjects"
+    android:enabled="true"
     />
 
   <Button
@@ -36,6 +38,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_upload_file"
     android:onClick="onClickButtonUploadFile"
+    android:enabled="true"
     />
 
   <Button
@@ -44,6 +47,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_download_file"
     android:onClick="onClickButtonDownloadFile"
+    android:enabled="true"
     />
 
   <Button
@@ -52,6 +56,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_upload_files_asynctask"
     android:onClick="onClickButtonUploadFilesAsyncTask"
+    android:enabled="true"
     />
 
   <Button
@@ -60,6 +65,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_download_files_asynctask"
     android:onClick="onClickButtonDownloadFilesAsyncTask"
+    android:enabled="true"
     />
 
   <Button
@@ -68,6 +74,7 @@
     android:layout_height="wrap_content"
     android:text="@string/button_get_metadata"
     android:onClick="onClickButtonGetMetaData"
+    android:enabled="true"
     />
 
 </LinearLayout>

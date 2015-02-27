@@ -6,12 +6,38 @@ package com.koakh.swiftpoc.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.koakh.swiftpoc.R;
 import com.koakh.swiftpoc.app.Singleton;
+import com.koakh.swiftpoc.background.UploadFileTask;
+import com.koakh.swiftpoc.rest.ServiceGenerator;
+import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateResponse;
+import com.koakh.swiftpoc.rest.identity.authenticate.AuthenticateServiceInterface;
+import com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainers.ListContainersResponse;
+import com.koakh.swiftpoc.rest.swift.accounts.showaccountdetailsandlistcontainers.ListContainersServiceInterface;
+import com.koakh.swiftpoc.rest.swift.containers.showcontainerdetailsandlistobjects.ContainerDetailsAndObjectsResponse;
+import com.koakh.swiftpoc.rest.swift.containers.showcontainerdetailsandlistobjects.ContainerDetailsAndObjectsServiceInterface;
+import com.koakh.swiftpoc.rest.swift.objects.createorreplaceobject.CreateOrReplaceObjectServiceInterface;
+import com.koakh.swiftpoc.rest.swift.objects.getobjectcontentandmetadata.GetObjectContentAndMetadataServiceInterface;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedFile;
+import retrofit.mime.TypedInput;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -54,6 +80,9 @@ public class PlaceholderFragmentViewPager1 extends Fragment {
 
     //Get Application Singleton
     mApp = ((Singleton) getActivity().getApplication().getApplicationContext());
+
+    Button buttonGetToken = (Button) rootView.findViewById(R.id.button_get_token);
+    Button buttonListContainers = (Button) rootView.findViewById(R.id.button_list_containers);
 
     return rootView;
   }

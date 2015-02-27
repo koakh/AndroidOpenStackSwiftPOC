@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.koakh.swiftpoc.R;
@@ -76,6 +77,9 @@ public class MainActivity extends ActionBarActivity {
     // Set up the ViewPager with the sections adapter.
     mViewPager = (ViewPager) findViewById(R.id.pager);
     mViewPager.setAdapter(mSectionsPagerAdapter);
+
+    //Prevent java.net.SocketException: recvfrom failed: ECONNRESET (Connection reset by peer)
+    System.setProperty("http.keepAlive", "false");
 
     //Singleton
     mApp = ((Singleton) this.getApplicationContext());
@@ -384,15 +388,14 @@ public class MainActivity extends ActionBarActivity {
 
   //============================================================================================================================================================================
   //Helper Methods
-
   private void showRetrofitError(RetrofitError error) {
-    String message = error.getLocalizedMessage()/*error.getCause().getMessage()*/;
+    String message = error.getLocalizedMessage();
     Log.e(mApp.TAG, String.format("RetrofitError Error : [%s]", message));
     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    mApp.getEditTextLog().append(message + "\n");
   }
 
   //private void toggleButtons(Boolean authenticated ) {
   //  Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.))
   //}
-
 }

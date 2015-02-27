@@ -2,6 +2,7 @@ package com.koakh.swiftpoc.rest;
 
 import android.content.Context;
 
+import com.koakh.swiftpoc.R;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,7 @@ public class ServiceGenerator {
 
     //Setup OkHttpClient
     OkHttpClient client = new OkHttpClient();
-    client.setConnectTimeout(30, TimeUnit.SECONDS);
+    client.setConnectTimeout(context.getResources().getInteger(R.integer.connection_time_out), TimeUnit.SECONDS);
 
     RestAdapter.Builder builder = new RestAdapter.Builder()
       .setEndpoint(baseUrl)
